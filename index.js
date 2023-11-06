@@ -11,6 +11,7 @@ app.use(express.json())
 const client = new MongoClient(process.env.MONGO_URI)
 const db = client.db('blogapp-c12')
 const blogPosts = db.collection('blog-posts')
+const userDb = db.collection('users')
 
 client.connect()
 console.log('Connected to Mongo')
@@ -28,47 +29,19 @@ app.post('/', async (req, res) => {
 	const allPosts = await blogPosts.find().toArray()
 	res.send(allPosts)
 })
+//sign up
+app.post ('/signup',async (req,res) => {
+ const userAdded = await userDb.insertOne({email: req.body.email, password: req.body.password})
+  console.log('user added to db ->',userAdded)
+  res.send(userAdded)
+})
+
+//log in
+app.post ('/login', (req,res) => {
+	console.log(req.body)
+	const userFound = userDb.findOne({email:req.body.email})
+
+	res.send(userFound)
+})
 
 app.listen('8080', () => console.log('Api listening on port 8080 😎'))
-
-
-
-
-/*
-import express from "express";
-import cors from "cors";
-import { MongoClient } from "mongodb";
-import  'dotenv/config'
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-
-const client = new MongoClient(process.env.MONGO_URI)
-const db = client.db("blogapp-c12");
-const blogPosts = db.collection("blog-posts");
-
-client.connect();
-console.log("Connected to Mongo database");
-
-app.get("/", async (req, res) => {
-  const allPost = await blogPosts.find().toArray();
-  console.log(" allPosts ->", allPost);
-  res.send(allPost);
-});
-
-app.post("/", async (req, res) => {
-  //console.log("req ->", req.body);
-
-  const newBlogPost = { title: req.body.title, content: req.body.content };
-  const addedItem = await blogPosts.insertOne(newBlogPost);
-
-  const allPosts = await blogPosts.find
-  console.log("addedItem ->", addedItem);
-  res.send(addedItem);
-});
-
-app.listen("8080", () => console.log("Api lsitening  on port 8080! 👿 "));
-
-*/
