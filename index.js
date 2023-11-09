@@ -45,5 +45,4 @@ app.post ('/login', (req,res) => {
 })
 
 const port = parseInt(process.env.PORT) || 8080;
-
 app.listen(port, () => console.log('Api listening on port 8080 😎'))
