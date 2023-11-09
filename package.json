@@ -24,10 +24,7 @@
   },
   "contributors": [],
   "scripts": {
-    "start": "node index.js",
-    "dev": "",
-    "test": ""
-
+    "start": "node index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
